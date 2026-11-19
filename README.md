@@ -139,6 +139,7 @@ python bot.py                                             機器人：自動搜�
 python bot.py --join 8743 --rematch                       機器人加入指定房間
 python bot.py --create 3                                  機器人建立 3 人房
 python bot.py --watch 8743                                機器人觀戰（終端機文字轉播）
+python rtt_test.py --host 192.168.43.20                  量測 RTT：送 20 次 PING，列出最小／平均／最大
 ```
 
 ## 九、目前限制（計畫書要如實寫）
