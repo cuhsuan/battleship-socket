@@ -479,6 +479,8 @@ class App:
             tk.Label(hd, text=f"艦長 {self.name}，歡迎登艦", font=self.f["h1"], fg=TEXT, bg=BG).pack(side="left")
             self.lb_info = tk.Label(hd, text="", font=self.f["b"], fg=MUTED, bg=BG)
             self.lb_info.pack(side="left", padx=16, pady=(6, 0))
+            FlatButton(hd, "← 返回伺服器選擇", self.back_to_servers, color=CARD, fg=TEXT,
+                       font=self.f["sb"], pady=7).pack(side="right")
             body = tk.Frame(wrap, bg=BG)
             body.pack(fill="both", expand=True, pady=14)
 
@@ -1608,6 +1610,14 @@ class App:
                 self.ping_t = time.time()
                 self.net.send({"cmd": "PING"})
         self.root.after(HEARTBEAT * 1000, self.heartbeat)
+
+    def back_to_servers(self):
+        """離開這台 Server，回到第一個畫面重新選擇（大廳裡沒有對局，Server 會立刻釋放暱稱）"""
+        self.send({"cmd": "LEAVE"}) if self.st else None
+        self.abandon()
+        if self.hosting:
+            self.conn_msg.config(text=f"你的 Server 仍在背景執行（Port {self.hosting.port}），其他玩家不受影響；"
+                                      "按「開 Server 並進入」可以回到自己的 Server", fg=MUTED)
 
     def abandon(self):
         """放棄重連，回到首頁（憑證仍保存在本機，之後用同暱稱連回同一台 Server 還能回到對局）"""
