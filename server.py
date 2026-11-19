@@ -464,7 +464,7 @@ class Server:
         if p.room or p in self.match_queue:
             return self.err("E_IN_ROOM")
         try:
-            cap = int(req.get("capacity", 2))
+            cap = int(req.get("capacity", MAX_PLAYERS))      # 預設 4 人上限，2 人以上房主即可開始
         except (TypeError, ValueError):
             cap = 0
         if not MIN_PLAYERS <= cap <= MAX_PLAYERS:

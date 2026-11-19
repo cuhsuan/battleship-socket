@@ -494,17 +494,8 @@ class App:
                 tk.Label(c, text=title, font=self.f["h2"], fg=TEXT, bg=PANEL, anchor="w").pack(fill="x")
                 tk.Label(c, text=desc, font=self.f["s"], fg=MUTED, bg=PANEL, anchor="w").pack(fill="x", pady=(2, 10))
                 return c
-            c = card("建立房間", "選擇人數；3、4 人房沒坐滿時房主也可以提早開始")
-            seg = tk.Frame(c, bg=PANEL)
-            seg.pack(fill="x", pady=(0, 10))
-            self.cap_lbls = {}
-            for n in range(2, MAX_PLAYERS + 1):
-                lb_ = tk.Label(seg, text=f"{n} 人", font=self.f["bb"], padx=10, pady=6, cursor="hand2")
-                lb_.pack(side="left", expand=True, fill="x", padx=2)
-                lb_.bind("<Button-1>", lambda e, n=n: self.set_cap(n))
-                self.cap_lbls[n] = lb_
-            self.set_cap(self.capacity)
-            FlatButton(c, "建立房間", lambda: self.send({"cmd": "CREATE", "capacity": self.capacity}),
+            c = card("建立房間", f"最多 {MAX_PLAYERS} 人；滿 2 人房主就能直接開始")
+            FlatButton(c, "建立房間", lambda: self.send({"cmd": "CREATE", "capacity": MAX_PLAYERS}),
                        color=WARN, font=self.f["bb"], pady=8).pack(fill="x")
             c = card("快速配對", "和其他正在配對的玩家 1 對 1")
             self.btn_match = FlatButton(c, "開始配對", lambda: None, font=self.f["bb"], pady=8)
@@ -533,13 +524,6 @@ class App:
             self.btn_match.config(text="開始配對")
             self.btn_match.command = lambda: self.send({"cmd": "MATCH"})
         self.render_rooms(lb.get("rooms", []))
-
-    def set_cap(self, n):
-        self.capacity = n
-        for k, lb_ in self.cap_lbls.items():
-            on = k == n
-            lb_.config(bg=ACCENT_DK if on else CARD, fg=ACCENT if on else MUTED,
-                       highlightthickness=1, highlightbackground=ACCENT if on else LINE)
 
     def render_rooms(self, rooms):
         for w in self.room_box.winfo_children():
